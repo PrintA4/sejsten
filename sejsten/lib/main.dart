@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: '16',
+      title: 'Seksten',
       home: MyCustomForm(),
     );
   }
@@ -27,22 +27,7 @@ class MyCustomForm extends StatefulWidget {
 
 class _MyCustomFormState extends State<MyCustomForm> {
   final myController = TextEditingController();
-
-  @override
-  void dispose() {
-    myController.dispose();
-    super.dispose();
-  }
-
-  List<Player> playerList = [];
-  var readLines = ['Alexander', 'Jens', 'Jørgen'];
-  String getNewLineString() {
-    StringBuffer sb = new StringBuffer();
-    for (String line in readLines) {
-      sb.write(line + "\n");
-    }
-    return sb.toString();
-  }
+  List<String> playerList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +35,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
       backgroundColor: Colors.lightBlue,
       appBar: AppBar(
         title: const Text(
-          '16',
+          'Seksten',
           style: TextStyle(fontSize: 32.0, color: Colors.yellow),
         ),
         centerTitle: true,
@@ -82,13 +67,14 @@ class _MyCustomFormState extends State<MyCustomForm> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  getNewLineString(),
-                  style: TextStyle(fontSize: 22.0, color: Colors.yellow),
+                  playerList.join("\n"),
+                  style: const TextStyle(fontSize: 22.0, color: Colors.yellow),
                 ),
               ),
             ),
           ),
           TextField(
+            style: TextStyle(color: Colors.yellow),
             textAlign: TextAlign.center,
             decoration: const InputDecoration(
                 hintText: 'Tilføj spiller',
@@ -115,6 +101,9 @@ class _MyCustomFormState extends State<MyCustomForm> {
                       style: TextStyle(fontSize: 26.0, color: Colors.yellow),
                     ),
                     onPressed: () {
+                      playerList.add(myController.text);
+                      myController.clear();
+                      print(playerList);
                       setState(() {});
                     },
                   ),
@@ -163,30 +152,48 @@ class game extends StatefulWidget {
   _gameState createState() => _gameState();
 }
 
+int diceVal = 0;
 int dice = 0;
-int max = 16;
-int diceValue = 0;
+int sum = 0;
+List<int> listOfNumbers = [];
+
 class _gameState extends State<game> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlue,
       appBar: AppBar(
-        title: const Text('16'),
+        title: const Text('Seksten'),
         centerTitle: true,
       ),
       body: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            const Text(
+              'Tenings total værdi',
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              sum.toString(),
+              style: const TextStyle(
+                fontSize: 70.0,
+                color: Colors.yellow,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             Container(
+              margin: EdgeInsets.only(top: 100),
               color: Colors.lightBlue,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    diceValue.toString(),
+                    dice.toString(),
                     style: const TextStyle(
                         fontSize: 70.0,
                         color: Colors.yellow,
@@ -216,7 +223,7 @@ class _gameState extends State<game> {
                       ),
                       onPressed: () {
                         randomNumber();
-                          setState(() {});
+                        setState(() {});
                       },
                     )))
           ],
@@ -226,18 +233,17 @@ class _gameState extends State<game> {
   }
 }
 
-
-//🎲
-
-void randomNumber(){
+void randomNumber() {
   var random = new Random();
   dice = random.nextInt(7);
-  int val = 0;
-  if(dice == 0){
+  if (dice == 0) {
     dice = 1;
   }
-  
+  listOfNumbers.add(dice);
+  sum = listOfNumbers.reduce((x, y) => x + y);
 }
+
+void addPlayer() {}
 
 class Player {
   final String name;
