@@ -1,8 +1,5 @@
 import 'dart:math';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() => runApp(const MyApp());
 
@@ -152,7 +149,9 @@ class game extends StatefulWidget {
   _gameState createState() => _gameState();
 }
 
-int diceVal = 0;
+_MyCustomFormState lobby = new _MyCustomFormState();
+List<String> playerList = lobby.playerList;
+
 int dice = 0;
 int sum = 0;
 List<int> listOfNumbers = [];
@@ -223,6 +222,25 @@ class _gameState extends State<game> {
                       ),
                       onPressed: () {
                         randomNumber();
+                        if (sum >= 16) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text("DRIK!"),
+                                content: Text('Alexander'),
+                                actions: <Widget>[
+                                  ElevatedButton(
+                                    child: new Text("OK"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
                         setState(() {});
                       },
                     )))
@@ -243,9 +261,7 @@ void randomNumber() {
   sum = listOfNumbers.reduce((x, y) => x + y);
 }
 
-void addPlayer() {}
-
 class Player {
   final String name;
-  Player({required this.name});
+  const Player(this.name);
 }
